@@ -38,6 +38,21 @@ export interface Dict {
     comingSoon: string[];
     ctaTitle: string;
     ctaSubtitle: string;
+    whyTitle: string;
+    whySubtitle: string;
+    whyPoints: { title: string; desc: string }[];
+    howTitle: string;
+    howSubtitle: string;
+    howSteps: { step: string; title: string; desc: string }[];
+    testimonialsTitle: string;
+    testimonialsSubtitle: string;
+    testimonials: { quote: string; name: string; role: string }[];
+    faqTitle: string;
+    faqSubtitle: string;
+    faqs: { q: string; a: string }[];
+    ctaBadge: string;
+    ctaButton: string;
+    ctaSecondary: string;
   };
   colorMatcher: {
     title: string;
@@ -219,6 +234,40 @@ const en: Dict = {
     ],
     ctaTitle: 'Ready to make something beautiful?',
     ctaSubtitle: 'Start free — no credit card needed.',
+    whyTitle: 'Why YarnMuse AI',
+    whySubtitle: 'We built the studio we always wished existed — a calm, intelligent companion for every crocheter.',
+    whyPoints: [
+      { title: 'Designed for makers', desc: 'Every tool is crafted around how crocheters actually think — color, texture, and rhythm.' },
+      { title: 'AI that understands yarn', desc: 'Our models are trained on crochet patterns, stitch anatomy, and fiber behavior — not generic text.' },
+      { title: 'From idea to hook', desc: 'Go from a vague spark to a complete, ready-to-stitch pattern in under a minute.' },
+      { title: 'A calmer kind of tool', desc: 'No clutter, no noise — just a warm, focused space that respects your craft.' },
+    ],
+    howTitle: 'How it works',
+    howSubtitle: 'Three gentle steps from inspiration to finished make.',
+    howSteps: [
+      { step: '01', title: 'Describe your idea', desc: 'Tell YarnMuse what you want to make — a bag, a bunny, a blanket — in plain words.' },
+      { step: '02', title: 'Let AI craft the pattern', desc: 'Get materials, difficulty, yarn estimate, and step-by-step instructions tailored to you.' },
+      { step: '03', title: 'Pick up your hook', desc: 'Follow the pattern, save it to your favorites, and share the finished make with the community.' },
+    ],
+    testimonialsTitle: 'Loved by makers everywhere',
+    testimonialsSubtitle: 'Thousands of crocheters use YarnMuse to plan, create, and share.',
+    testimonials: [
+      { quote: 'I described a sunflower granny square blanket and got a full pattern in seconds. It actually worked!', name: 'Maren K.', role: 'Hobby crocheter, Oslo' },
+      { quote: 'The color matcher saved me three trips to the yarn store. I uploaded a photo and got a palette instantly.', name: 'Priya S.', role: 'Etsy shop owner, London' },
+      { quote: 'As a beginner, the step-by-step patterns gave me the confidence to finish my first amigurumi.', name: 'Sofia R.', role: 'Beginner maker, Lisbon' },
+    ],
+    faqTitle: 'Frequently asked questions',
+    faqSubtitle: 'Everything you need to know before you pick up your hook.',
+    faqs: [
+      { q: 'Do I need to know how to crochet to use YarnMuse?', a: 'Not at all. YarnMuse generates patterns with clear, step-by-step instructions and difficulty levels, so beginners can start right away.' },
+      { q: 'Can I use the patterns commercially?', a: 'Free and Muse plans are for personal use. The Studio plan includes a commercial license for selling finished items.' },
+      { q: 'How does the AI color matcher work?', a: 'Upload a photo of your yarn or choose from our palette. The AI analyzes the colors and suggests harmonious combinations you can use in any project.' },
+      { q: 'Is there a free plan?', a: 'Yes. The Free plan includes 5 AI-generated patterns per month, basic color matching, gallery access, and community posting — no credit card needed.' },
+      { q: 'What languages does YarnMuse support?', a: 'The interface and generated patterns are available in English and Arabic, with more languages coming soon.' },
+    ],
+    ctaBadge: 'Start your next project today',
+    ctaButton: 'Generate your first pattern',
+    ctaSecondary: 'Browse the gallery',
   },
   colorMatcher: {
     title: 'AI Color Matcher',
@@ -404,6 +453,40 @@ const ar: Dict = {
     ],
     ctaTitle: 'جاهز لصنع شيء جميل؟',
     ctaSubtitle: 'ابدأ مجانًا — بدون بطاقة ائتمان.',
+    whyTitle: 'لماذا YarnMuse AI',
+    whySubtitle: 'بنينا الاستوديو الذي طالما تمنينا وجوده — رفيق هادئ وذكي لكل من يحيك.',
+    whyPoints: [
+      { title: 'مصمم للمبدعين', desc: 'كل أداة مصممة حول طريقة تفكير من يحوك — اللون والملمس والإيقاع.' },
+      { title: 'ذكاء اصطناعي يفهم الخيوط', desc: 'نماذجنا مدرّبة على أنماط الكروشيه وتشريح الغرز وسلوك الألياف — لا نصوص عامة.' },
+      { title: 'من الفكرة إلى الإبرة', desc: 'انتقل من شرارة غامضة إلى نمط كامل جاهز للتنفيذ في أقل من دقيقة.' },
+      { title: 'أداة أكثر هدوءًا', desc: 'بلا فوضى ولا ضجيج — مساحة دافئة ومركزة تحترم حرفتك.' },
+    ],
+    howTitle: 'كيف يعمل',
+    howSubtitle: 'ثلاث خطوات لطيفة من الإلهام إلى القطعة النهائية.',
+    howSteps: [
+      { step: '٠١', title: 'صِف فكرتك', desc: 'أخبر YarnMuse بما تريد صنعه — حقيبة أو أرنب أو بطانية — بكلمات بسيطة.' },
+      { step: '٠٢', title: 'دع الذكاء الاصطناعي يصمم النمط', desc: 'احصل على المواد ومستوى الصعوبة وتقدير الخيط وتعليمات خطوة بخطوة مخصصة لك.' },
+      { step: '٠٣', title: 'أمسك الإبرة', desc: 'اتبع النمط، احفظه في المفضلة، وشارك القطعة النهائية مع المجتمع.' },
+    ],
+    testimonialsTitle: 'محبوب من المبدعين في كل مكان',
+    testimonialsSubtitle: 'آلاف من يحكون يستخدمون YarnMuse للتخطيط والإبداع والمشاركة.',
+    testimonials: [
+      { quote: 'وصفت بطانية غراني سكوير زهرة الشمس وحصلت على نمط كامل في ثوانٍ. وعمل فعلاً!', name: 'ميرين ك.', role: 'هاوية كروشيه، أوسلو' },
+      { quote: 'مطابق الألوان وفّر عليّ ثلاث رحلات لمتجر الخيوط. رفعت صورة وحصلت على لوحة فورًا.', name: 'بريا س.', role: 'صاحبة متجر إتسي، لندن' },
+      { quote: 'كمبتدئة، الأنماط خطوة بخطوة منحتني الثقة لإنهاء أول أميغورومي لي.', name: 'صوفيا ر.', role: 'مبدئة، لشبونة' },
+    ],
+    faqTitle: 'الأسئلة الشائعة',
+    faqSubtitle: 'كل ما تحتاج معرفته قبل أن تمسك إبرتك.',
+    faqs: [
+      { q: 'هل أحتاج لمعرفة الكروشيه لاستخدام YarnMuse؟', a: 'إطلاقًا. يولّد YarnMuse أنماطًا بتعليمات واضحة خطوة بخطوة ومستويات صعوبة، حتى يبدأ المبتدئون فورًا.' },
+      { q: 'هل يمكنني استخدام الأنماط تجاريًا؟', a: 'خطتا المجانية وMuse للاستخدام الشخصي. تشمل خطة Studio رخصة تجارية لبيع القطع النهائية.' },
+      { q: 'كيف يعمل مطابق الألوان بالذكاء الاصطناعي؟', a: 'ارفع صورة لخيوطك أو اختر من لوحتنا. يحلل الذكاء الاصطناعي الألوان ويقترح تركيبات متناغمة يمكنك استخدامها في أي مشروع.' },
+      { q: 'هل هناك خطة مجانية؟', a: 'نعم. تشمل الخطة المجانية 5 أنماط مولّدة شهريًا، مطابقة ألوان أساسية، وصول للمعرض، ونشر في المجتمع — بدون بطاقة ائتمان.' },
+      { q: 'ما اللغات التي يدعمها YarnMuse؟', a: 'الواجهة والأنماط المولّدة متاحة بالإنجليزية والعربية، مع لغات أخرى قريبًا.' },
+    ],
+    ctaBadge: 'ابدأ مشروعك القادم اليوم',
+    ctaButton: 'أنشئ نمطك الأول',
+    ctaSecondary: 'تصفّح المعرض',
   },
   colorMatcher: {
     title: 'مطابق الألوان',
