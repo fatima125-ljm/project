@@ -6,7 +6,7 @@ import { AdSlot } from '@/components/AdSlot';
 import { galleryItems } from '@/lib/gallery-data';
 
 const heroImg =
-  'https://images.pexels.com/photos/6957094/pexels-photo-6957094.jpeg?auto=compress&cs=tinysrgb&w=1408&h=1104&fit=crop';
+  'https://images.pexels.com/photos/4601228/pexels-photo-4601228.png?auto=compress&cs=tinysrgb&w=1408&h=1104&fit=crop';
 
 export function HomePage() {
   const { dict, locale } = useI18n();
@@ -58,7 +58,7 @@ export function HomePage() {
           <div className="fade-up relative">
             <img
               src={heroImg}
-              alt="Balls of beige, cream and olive crochet yarn with wooden hooks"
+              alt="Vibrant yarn and crochet hook on textured fabric"
               className="w-full rounded-4xl object-cover shadow-lift"
             />
             <div className="surface absolute -bottom-5 start-4 flex items-center gap-3 px-4 py-3 sm:start-8">

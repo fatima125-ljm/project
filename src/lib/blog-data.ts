@@ -21,7 +21,7 @@ export const blogPosts: BlogPost[] = [
     titleAr: 'شرح أوزان الخيوط، من الرفيع إلى الضخم',
     excerpt: 'Choosing the right weight changes drape, size and yarn usage. Here is a simple map.',
     excerptAr: 'اختيار الوزن المناسب يغيّر الانسدال والحجم واستهلاك الخيط. إليك خريطة بسيطة.',
-    image: ph(4465124),
+    image: ph(37102283),
   },
   {
     id: 'neutral-palettes',
@@ -31,7 +31,7 @@ export const blogPosts: BlogPost[] = [
     titleAr: 'خمس لوحات محايدة تنجح دائمًا',
     excerpt: 'Beige, cream and olive combinations that photograph beautifully.',
     excerptAr: 'تركيبات البيج والكريمي والزيتوني التي تظهر بشكل جميل في الصور.',
-    image: ph(6585757),
+    image: ph(3693230),
   },
   {
     id: 'amigurumi-tension',
@@ -41,7 +41,7 @@ export const blogPosts: BlogPost[] = [
     titleAr: 'شد الأميغورومي: أوقف ظهور الحشو',
     excerpt: 'Tight, even stitches are everything. Three drills to fix loose rounds.',
     excerptAr: 'الغرز المشدودة والمتساوية هي كل شيء. ثلاثة تمارين لإصلاح الجولات الرخوة.',
-    image: ph(3661193),
+    image: ph(12109904),
   },
   {
     id: 'estimate-yarn-blanket',
@@ -51,6 +51,6 @@ export const blogPosts: BlogPost[] = [
     titleAr: 'كيف تقدّر كمية الخيط للبطانية',
     excerpt: 'A swatch, a scale and a little math give you a reliable number.',
     excerptAr: 'عينة وميزان وقليل من الرياضيات تمنحك رقمًا موثوقًا.',
-    image: ph(6957094),
+    image: ph(6463348),
   },
 ];
