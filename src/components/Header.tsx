@@ -17,6 +17,7 @@ export function Header() {
     { to: '/color-matcher', label: dict.nav.colorMatcher },
     { to: '/pattern-generator', label: dict.nav.patternGenerator },
     { to: '/gallery', label: dict.nav.gallery },
+    { to: '/pattern-library', label: dict.nav.library },
     { to: '/community', label: dict.nav.community },
     { to: '/blog', label: dict.nav.blog },
     { to: '/pricing', label: dict.nav.pricing },

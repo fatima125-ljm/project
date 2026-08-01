@@ -6,6 +6,8 @@ import { HomePage } from '@/pages/HomePage';
 import { ColorMatcherPage } from '@/pages/ColorMatcherPage';
 import { PatternGeneratorPage } from '@/pages/PatternGeneratorPage';
 import { GalleryPage } from '@/pages/GalleryPage';
+import { PatternLibraryPage } from '@/pages/PatternLibraryPage';
+import { PatternDetailPage } from '@/pages/PatternDetailPage';
 import { CommunityPage } from '@/pages/CommunityPage';
 import { BlogPage } from '@/pages/BlogPage';
 import { PricingPage } from '@/pages/PricingPage';
@@ -23,6 +25,8 @@ function App() {
               <Route path="/color-matcher" element={<ColorMatcherPage />} />
               <Route path="/pattern-generator" element={<PatternGeneratorPage />} />
               <Route path="/gallery" element={<GalleryPage />} />
+              <Route path="/pattern-library" element={<PatternLibraryPage />} />
+              <Route path="/pattern-library/:id" element={<PatternDetailPage />} />
               <Route path="/community" element={<CommunityPage />} />
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/pricing" element={<PricingPage />} />
