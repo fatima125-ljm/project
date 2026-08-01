@@ -18,6 +18,7 @@ export function Header() {
     { to: '/pattern-generator', label: dict.nav.patternGenerator },
     { to: '/gallery', label: dict.nav.gallery },
     { to: '/pattern-library', label: dict.nav.library },
+    { to: '/crochet-planner', label: dict.nav.planner },
     { to: '/community', label: dict.nav.community },
     { to: '/blog', label: dict.nav.blog },
     { to: '/pricing', label: dict.nav.pricing },

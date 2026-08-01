@@ -8,6 +8,7 @@ import { PatternGeneratorPage } from '@/pages/PatternGeneratorPage';
 import { GalleryPage } from '@/pages/GalleryPage';
 import { PatternLibraryPage } from '@/pages/PatternLibraryPage';
 import { PatternDetailPage } from '@/pages/PatternDetailPage';
+import { CrochetPlannerPage } from '@/pages/CrochetPlannerPage';
 import { CommunityPage } from '@/pages/CommunityPage';
 import { BlogPage } from '@/pages/BlogPage';
 import { PricingPage } from '@/pages/PricingPage';
@@ -27,6 +28,7 @@ function App() {
               <Route path="/gallery" element={<GalleryPage />} />
               <Route path="/pattern-library" element={<PatternLibraryPage />} />
               <Route path="/pattern-library/:id" element={<PatternDetailPage />} />
+              <Route path="/crochet-planner" element={<CrochetPlannerPage />} />
               <Route path="/community" element={<CommunityPage />} />
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/pricing" element={<PricingPage />} />

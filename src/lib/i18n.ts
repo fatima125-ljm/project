@@ -9,6 +9,7 @@ export interface Dict {
     patternGenerator: string;
     gallery: string;
     library: string;
+    planner: string;
     community: string;
     blog: string;
     pricing: string;
@@ -174,6 +175,100 @@ export interface Dict {
     relatedPatterns: string;
     favorites: string;
   };
+  planner: {
+    title: string;
+    subtitle: string;
+    signInPrompt: string;
+    tabs: { dashboard: string; projects: string; calendar: string; stats: string };
+    dashboard: {
+      welcome: string;
+      activeProjects: string;
+      completedProjects: string;
+      totalHours: string;
+      totalYarn: string;
+      weeklyProgress: string;
+      noProjects: string;
+      createFirst: string;
+      recentProjects: string;
+      deadlines: string;
+      noDeadlines: string;
+      daysLeft: string;
+      overdue: string;
+    };
+    create: {
+      title: string;
+      subtitle: string;
+      projectName: string;
+      projectNamePlaceholder: string;
+      category: string;
+      pattern: string;
+      patternPlaceholder: string;
+      startDate: string;
+      targetDate: string;
+      skillLevel: string;
+      yarnType: string;
+      hookSize: string;
+      yarnAmount: string;
+      yarnAmountPlaceholder: string;
+      notes: string;
+      notesPlaceholder: string;
+      create: string;
+      creating: string;
+      cancel: string;
+    };
+    detail: {
+      progress: string;
+      remaining: string;
+      completed: string;
+      completedBadge: string;
+      tasks: string;
+      addTask: string;
+      taskPlaceholder: string;
+      noTasks: string;
+      photoTimeline: string;
+      uploadPhoto: string;
+      photoCaption: string;
+      captionPlaceholder: string;
+      noPhotos: string;
+      notes: string;
+      notesPlaceholder: string;
+      saveNotes: string;
+      saving: string;
+      deleteProject: string;
+      back: string;
+      startDate: string;
+      targetDate: string;
+      skillLevel: string;
+      yarnType: string;
+      hookSize: string;
+      yarnAmount: string;
+      category: string;
+      pattern: string;
+    };
+    calendar: {
+      title: string;
+      prevMonth: string;
+      nextMonth: string;
+      today: string;
+      deadlines: string;
+      noDeadlines: string;
+      weekdays: string[];
+      months: string[];
+    };
+    stats: {
+      title: string;
+      totalProjects: string;
+      finishedProjects: string;
+      currentProjects: string;
+      totalHours: string;
+      avgCompletionTime: string;
+      completionRate: string;
+      byCategory: string;
+      noData: string;
+    };
+    categories: string[];
+    skillLevels: string[];
+  };
   community: {
     title: string;
     subtitle: string;
@@ -267,6 +362,7 @@ const en: Dict = {
     patternGenerator: 'AI Pattern Generator',
     gallery: 'Inspiration Gallery',
     library: 'Pattern Library',
+    planner: 'Crochet Planner',
     community: 'Community',
     blog: 'Blog',
     pricing: 'Pricing',
@@ -506,6 +602,100 @@ const en: Dict = {
     relatedPatterns: 'You might also like',
     favorites: 'favorites',
   },
+  planner: {
+    title: 'Crochet Planner',
+    subtitle: 'Organize your projects, track progress, and stay on top of deadlines.',
+    signInPrompt: 'Sign in to start planning your crochet projects.',
+    tabs: { dashboard: 'Dashboard', projects: 'Projects', calendar: 'Calendar', stats: 'Statistics' },
+    dashboard: {
+      welcome: 'Welcome back',
+      activeProjects: 'Active Projects',
+      completedProjects: 'Completed',
+      totalHours: 'Total Hours',
+      totalYarn: 'Yarn Used (m)',
+      weeklyProgress: 'Weekly Progress',
+      noProjects: 'No projects yet. Create your first project to get started!',
+      createFirst: 'Create New Project',
+      recentProjects: 'Recent Projects',
+      deadlines: 'Upcoming Deadlines',
+      noDeadlines: 'No upcoming deadlines. You are all caught up!',
+      daysLeft: 'days left',
+      overdue: 'Overdue',
+    },
+    create: {
+      title: 'Create New Project',
+      subtitle: 'Start a new crochet project and track it from start to finish.',
+      projectName: 'Project Name',
+      projectNamePlaceholder: 'e.g. Granny Square Blanket',
+      category: 'Category',
+      pattern: 'Pattern (optional)',
+      patternPlaceholder: 'Link or pattern name',
+      startDate: 'Start Date',
+      targetDate: 'Target Completion Date',
+      skillLevel: 'Skill Level',
+      yarnType: 'Yarn Type',
+      hookSize: 'Hook Size',
+      yarnAmount: 'Estimated Yarn Amount (m)',
+      yarnAmountPlaceholder: 'e.g. 500',
+      notes: 'Notes',
+      notesPlaceholder: 'Any extra details about this project...',
+      create: 'Create Project',
+      creating: 'Creating...',
+      cancel: 'Cancel',
+    },
+    detail: {
+      progress: 'Progress',
+      remaining: 'remaining',
+      completed: 'Completed',
+      completedBadge: 'Completed',
+      tasks: 'Task Checklist',
+      addTask: 'Add Task',
+      taskPlaceholder: 'e.g. Buy yarn',
+      noTasks: 'No tasks yet. Add one to get started.',
+      photoTimeline: 'Photo Timeline',
+      uploadPhoto: 'Upload Photo',
+      photoCaption: 'Caption',
+      captionPlaceholder: 'Describe this progress photo...',
+      noPhotos: 'No photos yet. Upload progress photos to build your timeline.',
+      notes: 'Notes',
+      notesPlaceholder: 'Write notes about this project...',
+      saveNotes: 'Save Notes',
+      saving: 'Saving...',
+      deleteProject: 'Delete Project',
+      back: 'Back to Projects',
+      startDate: 'Start Date',
+      targetDate: 'Target Date',
+      skillLevel: 'Skill Level',
+      yarnType: 'Yarn Type',
+      hookSize: 'Hook Size',
+      yarnAmount: 'Yarn Amount',
+      category: 'Category',
+      pattern: 'Pattern',
+    },
+    calendar: {
+      title: 'Calendar',
+      prevMonth: 'Previous month',
+      nextMonth: 'Next month',
+      today: 'Today',
+      deadlines: 'Upcoming Deadlines',
+      noDeadlines: 'No deadlines scheduled.',
+      weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    },
+    stats: {
+      title: 'Statistics',
+      totalProjects: 'Total Projects',
+      finishedProjects: 'Finished Projects',
+      currentProjects: 'Current Projects',
+      totalHours: 'Total Crochet Hours',
+      avgCompletionTime: 'Avg. Completion Time',
+      completionRate: 'Completion Rate',
+      byCategory: 'Projects by Category',
+      noData: 'No data yet. Create and complete projects to see your statistics.',
+    },
+    categories: ['Bags', 'Amigurumi', 'Blankets', 'Hats', 'Scarves', 'Home Decor'],
+    skillLevels: ['Beginner', 'Intermediate', 'Advanced'],
+  },
   community: {
     title: 'Community',
     subtitle: 'Share your finished makes, swap tips and cheer each other on.',
@@ -599,6 +789,7 @@ const ar: Dict = {
     patternGenerator: 'مولّد الأنماط',
     gallery: 'معرض الإلهام',
     library: 'مكتبة الأنماط',
+    planner: 'مخطط الكروشيه',
     community: 'المجتمع',
     blog: 'المدونة',
     pricing: 'الأسعار',
@@ -837,6 +1028,100 @@ const ar: Dict = {
     back: 'العودة للمكتبة',
     relatedPatterns: 'قد يعجبك أيضًا',
     favorites: 'مفضلة',
+  },
+  planner: {
+    title: 'مخطط الكروشيه',
+    subtitle: 'نظّم مشاريعك، وتابع تقدّمك، وابقَ على اطّلاع بالمواعيد النهائية.',
+    signInPrompt: 'سجّل الدخول لبدء تخطيط مشاريع الكروشيه الخاصة بك.',
+    tabs: { dashboard: 'لوحة التحكم', projects: 'المشاريع', calendar: 'التقويم', stats: 'الإحصائيات' },
+    dashboard: {
+      welcome: 'مرحبًا بعودتك',
+      activeProjects: 'المشاريع النشطة',
+      completedProjects: 'المكتملة',
+      totalHours: 'إجمالي الساعات',
+      totalYarn: 'الخيط المستخدم (م)',
+      weeklyProgress: 'التقدّم الأسبوعي',
+      noProjects: 'لا توجد مشاريع بعد. أنشئ مشروعك الأول للبدء!',
+      createFirst: 'إنشاء مشروع جديد',
+      recentProjects: 'المشاريع الأخيرة',
+      deadlines: 'المواعيد القادمة',
+      noDeadlines: 'لا توجد مواعيد قادمة. كل شيء تحت السيطرة!',
+      daysLeft: 'يوم متبقٍ',
+      overdue: 'متأخر',
+    },
+    create: {
+      title: 'إنشاء مشروع جديد',
+      subtitle: 'ابدأ مشروع كروشيه جديد وتابعه من البداية إلى النهاية.',
+      projectName: 'اسم المشروع',
+      projectNamePlaceholder: 'مثال: بطانية مربعات الجدة',
+      category: 'الفئة',
+      pattern: 'النمط (اختياري)',
+      patternPlaceholder: 'رابط أو اسم النمط',
+      startDate: 'تاريخ البدء',
+      targetDate: 'تاريخ الإنجاز المستهدف',
+      skillLevel: 'مستوى المهارة',
+      yarnType: 'نوع الخيط',
+      hookSize: 'حجم الإبرة',
+      yarnAmount: 'كمية الخيط المقدّرة (م)',
+      yarnAmountPlaceholder: 'مثال: 500',
+      notes: 'ملاحظات',
+      notesPlaceholder: 'أي تفاصيل إضافية عن هذا المشروع...',
+      create: 'إنشاء المشروع',
+      creating: 'جارٍ الإنشاء...',
+      cancel: 'إلغاء',
+    },
+    detail: {
+      progress: 'التقدّم',
+      remaining: 'متبقٍ',
+      completed: 'مكتمل',
+      completedBadge: 'مكتمل',
+      tasks: 'قائمة المهام',
+      addTask: 'إضافة مهمة',
+      taskPlaceholder: 'مثال: شراء الخيط',
+      noTasks: 'لا توجد مهام بعد. أضف واحدة للبدء.',
+      photoTimeline: 'الخط الزمني للصور',
+      uploadPhoto: 'رفع صورة',
+      photoCaption: 'تعليق',
+      captionPlaceholder: 'صف صورة التقدّم...',
+      noPhotos: 'لا توجد صور بعد. ارفع صور تقدّم لبناء خطك الزمني.',
+      notes: 'ملاحظات',
+      notesPlaceholder: 'اكتب ملاحظات عن هذا المشروع...',
+      saveNotes: 'حفظ الملاحظات',
+      saving: 'جارٍ الحفظ...',
+      deleteProject: 'حذف المشروع',
+      back: 'العودة للمشاريع',
+      startDate: 'تاريخ البدء',
+      targetDate: 'التاريخ المستهدف',
+      skillLevel: 'مستوى المهارة',
+      yarnType: 'نوع الخيط',
+      hookSize: 'حجم الإبرة',
+      yarnAmount: 'كمية الخيط',
+      category: 'الفئة',
+      pattern: 'النمط',
+    },
+    calendar: {
+      title: 'التقويم',
+      prevMonth: 'الشهر السابق',
+      nextMonth: 'الشهر التالي',
+      today: 'اليوم',
+      deadlines: 'المواعيد القادمة',
+      noDeadlines: 'لا توجد مواعيد مجدولة.',
+      weekdays: ['أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'],
+      months: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
+    },
+    stats: {
+      title: 'الإحصائيات',
+      totalProjects: 'إجمالي المشاريع',
+      finishedProjects: 'المشاريع المنتهية',
+      currentProjects: 'المشاريع الحالية',
+      totalHours: 'إجمالي ساعات الكروشيه',
+      avgCompletionTime: 'متوسط وقت الإنجاز',
+      completionRate: 'معدل الإكمال',
+      byCategory: 'المشاريع حسب الفئة',
+      noData: 'لا توجد بيانات بعد. أنشئ وأكمل مشاريع لرؤية إحصائياتك.',
+    },
+    categories: ['الحقائب', 'أميغورومي', 'البطانيات', 'القبعات', 'الوشاح', 'ديكور المنزل'],
+    skillLevels: ['مبتدئ', 'متوسط', 'متقدم'],
   },
   community: {
     title: 'المجتمع',
