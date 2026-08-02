@@ -16,17 +16,20 @@ export function GalleryPage() {
   const [color, setColor] = useState(0);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [busy, setBusy] = useState<string | null>(null);
+  const [loadingFavs, setLoadingFavs] = useState(false);
 
   useEffect(() => {
     if (!user) {
       setFavorites(new Set());
       return;
     }
+    setLoadingFavs(true);
     supabase
       .from('favorites')
       .select('item_key')
-      .then(({ data }) => {
-        setFavorites(new Set((data ?? []).map((r: { item_key: string }) => r.item_key)));
+      .then(({ data, error }) => {
+        if (!error) setFavorites(new Set((data ?? []).map((r: { item_key: string }) => r.item_key)));
+        setLoadingFavs(false);
       });
   }, [user]);
 
@@ -50,9 +53,11 @@ export function GalleryPage() {
       return next;
     });
     if (isFav) {
-      await supabase.from('favorites').delete().eq('item_key', key);
+      const { error } = await supabase.from('favorites').delete().eq('item_key', key);
+      if (error) { setFavorites((prev) => { const n = new Set(prev); n.add(key); return n; }); }
     } else {
-      await supabase.from('favorites').insert({ item_key: key });
+      const { error } = await supabase.from('favorites').insert({ item_key: key });
+      if (error) { setFavorites((prev) => { const n = new Set(prev); n.delete(key); return n; }); }
     }
     setBusy(null);
   };
@@ -91,6 +96,7 @@ export function GalleryPage() {
                         onClick={() => toggleFav(item.key)}
                         disabled={busy === item.key}
                         aria-label={isFav ? t.saved : t.save}
+                        aria-busy={busy === item.key}
                         className="absolute end-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-background/80 backdrop-blur transition-transform hover:scale-110"
                       >
                         {isFav ? (

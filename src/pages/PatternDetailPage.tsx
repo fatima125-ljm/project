@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import {
   Heart,
@@ -15,6 +15,7 @@ import {
   Ruler,
   BookOpen,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useI18n } from '@/lib/i18n-context';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
@@ -39,6 +40,12 @@ export function PatternDetailPage() {
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const shareTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => { if (shareTimer.current) clearTimeout(shareTimer.current); };
+  }, []);
 
   const pattern = libraryPatterns.find((p) => p.id === id);
   if (!pattern) return <Navigate to="/pattern-library" replace />;
@@ -58,14 +65,17 @@ export function PatternDetailPage() {
 
   const share = () => {
     const url = window.location.href;
-    navigator.clipboard.writeText(url);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      if (shareTimer.current) clearTimeout(shareTimer.current);
+      shareTimer.current = setTimeout(() => setCopied(false), 2000);
+    }).catch(() => {});
   };
 
   const save = async () => {
     if (!user || !pattern) return;
     setSaving(true);
+    setSaveError(null);
     const { error } = await supabase.from('saved_patterns').insert({
       project_type: pattern.category,
       skill_level: pattern.difficulty,
@@ -76,10 +86,11 @@ export function PatternDetailPage() {
       pattern_data: { title, ...pattern } as unknown as Record<string, unknown>,
     });
     setSaving(false);
-    if (!error) setSaved(true);
+    if (error) setSaveError(error.message);
+    else setSaved(true);
   };
 
-  const downloadPdf = () => {
+  const downloadText = () => {
     const text = [
       title,
       '',
@@ -98,15 +109,11 @@ export function PatternDetailPage() {
       t.description,
       desc,
     ].join('\n');
-
-    const blob = new Blob(
-      [`%PDF-1.4\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>\nendobj\n4 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n5 0 obj\n<< /Length ${text.length + 200} >>\nstream\nBT\n/F1 11 Tf\n50 790 Td\n14 TL\n${text.split('\n').map((l) => `(${l.replace(/[()\\]/g, '\\$&')}) Tj`).join('\nT*\n')}\nT*\nET\nendstream\nendobj\nxref\n0 6\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n0000000266 00000 n \n0000000335 00000 n \ntrailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${text.length + 600}\n%%EOF`],
-      { type: 'application/pdf' },
-    );
+    const blob = new Blob([text], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${title}.pdf`;
+    a.download = `${title}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -133,6 +140,9 @@ export function PatternDetailPage() {
                 <img
                   src={pattern.gallery[activeImg]}
                   alt={title}
+                  loading="eager"
+                  width={600}
+                  height={750}
                   className="aspect-[4/5] w-full object-cover"
                 />
                 <div className="absolute start-3 top-3 flex gap-1.5">
@@ -169,7 +179,7 @@ export function PatternDetailPage() {
                       activeImg === i ? 'border-olive' : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <img src={img} alt={`${title} ${i + 1}`} className="h-20 w-20 object-cover" />
+                    <img src={img} alt={`${title} ${i + 1}`} loading="lazy" className="h-20 w-20 object-cover" />
                   </button>
                 ))}
               </div>
@@ -195,15 +205,25 @@ export function PatternDetailPage() {
 
               {/* Action buttons */}
               <div className="mt-8 flex flex-wrap gap-3">
-                <Button onClick={save} disabled={!user || saving || saved}>
-                  {saved ? (
-                    <Check className="h-4 w-4 text-success" />
-                  ) : (
-                    <Heart className={`h-4 w-4 ${saved ? 'fill-olive text-olive' : ''}`} />
-                  )}
-                  {saved ? t.saved : user ? t.saveToFavorites : t.signInToSave}
-                </Button>
-                <Button variant="outline" onClick={downloadPdf}>
+                {user ? (
+                  <Button onClick={save} disabled={saving || saved}>
+                    {saved ? (
+                      <Check className="h-4 w-4 text-success" />
+                    ) : (
+                      <Heart className={`h-4 w-4 ${saved ? 'fill-olive text-olive' : ''}`} />
+                    )}
+                    {saved ? t.saved : t.saveToFavorites}
+                  </Button>
+                ) : (
+                  <Link to="/login">
+                    <Button variant="outline">
+                      <Heart className="h-4 w-4" />
+                      {t.signInToSave}
+                    </Button>
+                  </Link>
+                )}
+                {saveError && <span className="self-center text-sm text-error">{saveError}</span>}
+                <Button variant="outline" onClick={downloadText}>
                   <Download className="h-4 w-4" />
                   {t.downloadPdf}
                 </Button>
@@ -309,7 +329,7 @@ function StatCard({
   label,
   value,
 }: {
-  icon: typeof Clock;
+  icon: LucideIcon;
   label: string;
   value: string;
 }) {

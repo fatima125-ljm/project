@@ -85,6 +85,8 @@ export function HomePage() {
               <img
                 src={heroImg}
                 alt="Vibrant yarn and crochet hook on textured fabric"
+                width={600}
+                height={750}
                 className="w-full rounded-[2rem] object-cover shadow-lift"
               />
               <div className="surface absolute -bottom-5 start-4 flex items-center gap-3 px-4 py-3 shadow-lift sm:start-8">
@@ -142,6 +144,9 @@ export function HomePage() {
                 <img
                   src={whyImg}
                   alt="Colorful crocheted fabric layers"
+                  loading="lazy"
+                  width={600}
+                  height={750}
                   className="w-full rounded-[2rem] object-cover shadow-lift"
                 />
                 <div className="surface absolute -bottom-5 -end-4 flex items-center gap-3 px-5 py-4 shadow-lift">
@@ -310,6 +315,8 @@ export function HomePage() {
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="flex w-full items-center justify-between gap-4 px-5 py-4 text-start"
+                  aria-expanded={openFaq === i}
+                  aria-controls={`faq-${i}`}
                 >
                   <span className="text-sm font-semibold">{f.q}</span>
                   <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-olive/10">
@@ -321,6 +328,8 @@ export function HomePage() {
                   </span>
                 </button>
                 <div
+                  id={`faq-${i}`}
+                  role="region"
                   className="grid transition-all duration-300 ease-out"
                   style={{
                     gridTemplateRows: openFaq === i ? '1fr' : '0fr',

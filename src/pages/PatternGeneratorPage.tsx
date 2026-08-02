@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Wand2,
   Copy,
@@ -18,6 +18,9 @@ import {
   Scissors,
   Type,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import type { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { useI18n } from '@/lib/i18n-context';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
@@ -303,60 +306,13 @@ function buildPatternText(p: GeneratedPattern, t: typeof dict.pattern, useAr: bo
 }
 
 // minimal PDF builder — prints the pattern text into a downloadable PDF
-function downloadPdf(p: GeneratedPattern, t: typeof dict.pattern, useAr: boolean) {
+function downloadText(p: GeneratedPattern, t: typeof dict.pattern, useAr: boolean) {
   const text = buildPatternText(p, t, useAr);
-  const isRtl = useAr;
-  const blob = new Blob(
-    [
-      `%PDF-1.4
-1 0 obj
-<< /Type /Catalog /Pages 2 0 R >>
-endobj
-2 0 obj
-<< /Type /Pages /Kids [3 0 R] /Count 1 >>
-endobj
-3 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
-endobj
-4 0 obj
-<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
-endobj
-5 0 obj
-<< /Length ${text.length + 200} >>
-stream
-BT
-/F1 11 Tf
-50 790 Td
-14 TL
-${isRtl ? '0.85 0 0 0.85 545 0 Tm' : ''}
-${text
-  .split('\n')
-  .map((line) => `(${line.replace(/[()\\]/g, '\\$&')}) Tj`)
-  .join('\nT*\n')}
-T*
-ET
-endstream
-endobj
-xref
-0 6
-0000000000 65535 f 
-0000000009 00000 n 
-0000000058 00000 n 
-0000000115 00000 n 
-0000000266 00000 n 
-0000000335 00000 n 
-trailer
-<< /Size 6 /Root 1 0 R >>
-startxref
-${text.length + 600}
-%%EOF`,
-    ],
-    { type: 'application/pdf' },
-  );
+  const blob = new Blob([text], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `${useAr ? p.titleAr : p.title}.pdf`;
+  a.download = `${useAr ? p.titleAr : p.title}.txt`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -378,6 +334,16 @@ export function PatternGeneratorPage() {
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const genTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (genTimer.current) clearTimeout(genTimer.current);
+      if (copyTimer.current) clearTimeout(copyTimer.current);
+    };
+  }, []);
 
   const useAr = patternLang === 1;
 
@@ -387,7 +353,7 @@ export function PatternGeneratorPage() {
     setLoading(true);
     setPattern(null);
     setSaved(false);
-    setTimeout(() => {
+    genTimer.current = setTimeout(() => {
       setPattern(
         generatePattern({
           projectType,
@@ -405,14 +371,17 @@ export function PatternGeneratorPage() {
 
   const copy = () => {
     if (!pattern) return;
-    navigator.clipboard.writeText(buildPatternText(pattern, t, useAr));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    navigator.clipboard.writeText(buildPatternText(pattern, t, useAr)).then(() => {
+      setCopied(true);
+      if (copyTimer.current) clearTimeout(copyTimer.current);
+      copyTimer.current = setTimeout(() => setCopied(false), 2000);
+    }).catch(() => {});
   };
 
   const saveToFavorites = async () => {
     if (!pattern || !user) return;
     setSaving(true);
+    setSaveError(null);
     const { error } = await supabase.from('saved_patterns').insert({
       project_type: projectType,
       skill_level: t.skillLevels[skillLevel],
@@ -423,7 +392,8 @@ export function PatternGeneratorPage() {
       pattern_data: pattern as unknown as Record<string, unknown>,
     });
     setSaving(false);
-    if (!error) setSaved(true);
+    if (error) setSaveError(error.message);
+    else setSaved(true);
   };
 
   return (
@@ -556,23 +526,33 @@ export function PatternGeneratorPage() {
                         {copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
                         {copied ? t.copied : t.copy}
                       </Button>
-                      <Button variant="ghost" size="sm" onClick={() => downloadPdf(pattern, t, useAr)}>
+                      <Button variant="ghost" size="sm" onClick={() => downloadText(pattern, t, useAr)}>
                         <Download className="h-4 w-4" />
                         {t.downloadPdf}
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={saveToFavorites}
-                        disabled={!user || saving || saved}
-                      >
-                        {saved ? (
-                          <Check className="h-4 w-4 text-success" />
-                        ) : (
-                          <Heart className={`h-4 w-4 ${saved ? 'fill-olive text-olive' : ''}`} />
-                        )}
-                        {saved ? t.saved : user ? t.saveToFavorites : t.signInToSave}
-                      </Button>
+                      {user ? (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={saveToFavorites}
+                          disabled={saving || saved}
+                        >
+                          {saved ? (
+                            <Check className="h-4 w-4 text-success" />
+                          ) : (
+                            <Heart className={`h-4 w-4 ${saved ? 'fill-olive text-olive' : ''}`} />
+                          )}
+                          {saved ? t.saved : t.saveToFavorites}
+                        </Button>
+                      ) : (
+                        <Link to="/login">
+                          <Button variant="ghost" size="sm">
+                            <Heart className="h-4 w-4" />
+                            {t.signInToSave}
+                          </Button>
+                        </Link>
+                      )}
+                      {saveError && <span className="self-center text-sm text-error">{saveError}</span>}
                     </div>
                   </div>
 
@@ -706,7 +686,7 @@ function SelectField({
   );
 }
 
-function Stat({ icon: Icon, label, value }: { icon: typeof Clock; label: string; value: string }) {
+function Stat({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-border bg-muted/30 p-3">
       <Icon className="h-4 w-4 text-olive" />
@@ -721,9 +701,9 @@ function Section({
   title,
   children,
 }: {
-  icon: typeof Clock;
+  icon: LucideIcon;
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <div className="mt-8 border-t border-border pt-6">

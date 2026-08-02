@@ -34,6 +34,7 @@ export function ColorMatcherPage() {
   };
 
   const onFile = useCallback((file: File) => {
+    if (file.size > 10 * 1024 * 1024) return;
     setAnalyzing(true);
     const reader = new FileReader();
     reader.onload = () => {
@@ -45,7 +46,7 @@ export function ColorMatcherPage() {
         canvas.width = size;
         canvas.height = size;
         const ctx = canvas.getContext('2d');
-        if (!ctx) return;
+        if (!ctx) { setAnalyzing(false); return; }
         ctx.drawImage(img, 0, 0, size, size);
         const data = ctx.getImageData(0, 0, size, size).data;
         const buckets = new Map<string, { count: number; r: number; g: number; b: number }>();
@@ -71,8 +72,10 @@ export function ColorMatcherPage() {
         setPhotoColors(colors);
         setAnalyzing(false);
       };
+      img.onerror = () => setAnalyzing(false);
       img.src = reader.result as string;
     };
+    reader.onerror = () => setAnalyzing(false);
     reader.readAsDataURL(file);
   }, []);
 
@@ -114,6 +117,7 @@ export function ColorMatcherPage() {
                       onClick={() => addColor(c)}
                       className="group relative aspect-square rounded-2xl border border-border transition-transform hover:scale-105"
                       style={{ backgroundColor: c.hex }}
+                      aria-label={locale === 'ar' ? c.nameAr : c.name}
                       title={locale === 'ar' ? c.nameAr : c.name}
                     >
                       <span className="absolute inset-x-0 -bottom-6 text-center text-[10px] text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100">
@@ -133,7 +137,7 @@ export function ColorMatcherPage() {
                         <span key={c.hex} className="inline-flex items-center gap-2 rounded-full border border-border bg-card py-1 ps-1 pe-3 text-xs">
                           <span className="h-5 w-5 rounded-full" style={{ backgroundColor: c.hex }} />
                           {locale === 'ar' ? c.nameAr : c.name}
-                          <button onClick={() => removeColor(c.hex)} className="text-muted-foreground hover:text-foreground">
+                          <button onClick={() => removeColor(c.hex)} className="text-muted-foreground hover:text-foreground" aria-label={t.remove}>
                             <X className="h-3 w-3" />
                           </button>
                         </span>
@@ -197,7 +201,7 @@ export function ColorMatcherPage() {
                 <div className="mt-4 grid grid-cols-2 gap-3">
                   {previews.map((p) => (
                     <div key={p.key} className="overflow-hidden rounded-2xl border border-border">
-                      <img src={p.image} alt={locale === 'ar' ? p.titleAr : p.title} className="aspect-square w-full object-cover" />
+                      <img src={p.image} alt={locale === 'ar' ? p.titleAr : p.title} loading="lazy" className="aspect-square w-full object-cover" />
                       <p className="px-3 py-2 text-xs font-medium">{locale === 'ar' ? p.titleAr : p.title}</p>
                     </div>
                   ))}
@@ -248,7 +252,7 @@ function PhotoUploader({
       <input
         type="file"
         accept="image/*"
-        className="hidden"
+        className="sr-only"
         onChange={(e) => {
           const f = e.target.files?.[0];
           if (f) onFile(f);
@@ -256,7 +260,7 @@ function PhotoUploader({
       />
       {preview ? (
         <div className="relative h-full w-full">
-          <img src={preview} alt="upload" className="h-full w-full rounded-2xl object-cover" />
+          <img src={preview} alt="" loading="lazy" className="h-full w-full rounded-2xl object-cover" />
           {analyzing && (
             <div className="absolute inset-0 grid place-items-center rounded-2xl bg-background/70 text-sm font-medium">
               {t.analyzing}

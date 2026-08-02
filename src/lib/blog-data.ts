@@ -2,6 +2,7 @@ export interface BlogPost {
   id: string;
   date: string;
   dateLabel: string;
+  dateLabelAr: string;
   title: string;
   titleAr: string;
   excerpt: string;
@@ -17,6 +18,7 @@ export const blogPosts: BlogPost[] = [
     id: 'yarn-weights-explained',
     date: '2026-06-14',
     dateLabel: 'Jun 14, 2026',
+    dateLabelAr: '١٤ يونيو ٢٠٢٦',
     title: 'Yarn weights explained, from lace to jumbo',
     titleAr: 'شرح أوزان الخيوط، من الرفيع إلى الضخم',
     excerpt: 'Choosing the right weight changes drape, size and yarn usage. Here is a simple map.',
@@ -27,6 +29,7 @@ export const blogPosts: BlogPost[] = [
     id: 'neutral-palettes',
     date: '2026-05-30',
     dateLabel: 'May 30, 2026',
+    dateLabelAr: '٣٠ مايو ٢٠٢٦',
     title: 'Five neutral palettes that always work',
     titleAr: 'خمس لوحات محايدة تنجح دائمًا',
     excerpt: 'Beige, cream and olive combinations that photograph beautifully.',
@@ -37,6 +40,7 @@ export const blogPosts: BlogPost[] = [
     id: 'amigurumi-tension',
     date: '2026-05-12',
     dateLabel: 'May 12, 2026',
+    dateLabelAr: '١٢ مايو ٢٠٢٦',
     title: 'Amigurumi tension: stop the stuffing show',
     titleAr: 'شد الأميغورومي: أوقف ظهور الحشو',
     excerpt: 'Tight, even stitches are everything. Three drills to fix loose rounds.',
@@ -47,6 +51,7 @@ export const blogPosts: BlogPost[] = [
     id: 'estimate-yarn-blanket',
     date: '2026-04-28',
     dateLabel: 'Apr 28, 2026',
+    dateLabelAr: '٢٨ أبريل ٢٠٢٦',
     title: 'How to estimate yarn for a blanket',
     titleAr: 'كيف تقدّر كمية الخيط للبطانية',
     excerpt: 'A swatch, a scale and a little math give you a reliable number.',

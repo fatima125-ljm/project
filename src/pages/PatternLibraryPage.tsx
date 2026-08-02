@@ -25,10 +25,8 @@ export function PatternLibraryPage() {
   const [visibleCount, setVisibleCount] = useState(9);
 
   useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 600);
-    return () => clearTimeout(timer);
-  }, [search, category, difficulty, sort]);
+    setLoading(false);
+  }, []);
 
   const filtered = useMemo(() => {
     let result = [...libraryPatterns];
@@ -98,7 +96,8 @@ export function PatternLibraryPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={t.searchPlaceholder}
-            className="w-full rounded-2xl border border-input bg-card py-3 ps-11 pe-4 text-sm outline-none transition-colors focus:border-olive/50"
+            aria-label={t.searchPlaceholder}
+            className="w-full rounded-2xl border border-input bg-card py-3 ps-11 pe-4 text-sm outline-none transition-colors focus:border-olive/50 focus:ring-2 focus:ring-olive/20"
           />
         </div>
 
@@ -108,6 +107,7 @@ export function PatternLibraryPage() {
             <button
               key={cat}
               onClick={() => setCategory(i)}
+              aria-pressed={category === i}
               className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-all ${
                 category === i
                   ? 'border-olive bg-olive text-cream'
@@ -126,6 +126,7 @@ export function PatternLibraryPage() {
               <button
                 key={diff}
                 onClick={() => setDifficulty(i)}
+                aria-pressed={difficulty === i}
                 className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-all ${
                   difficulty === i
                     ? 'border-brown bg-brown text-cream'
@@ -142,7 +143,8 @@ export function PatternLibraryPage() {
             <select
               value={sort}
               onChange={(e) => setSort(Number(e.target.value))}
-              className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground outline-none focus:border-olive/50"
+              aria-label={t.sortOptions[sort]}
+              className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground outline-none focus:border-olive/50 focus:ring-2 focus:ring-olive/20"
             >
               {t.sortOptions.map((opt, i) => (
                 <option key={opt} value={i}>

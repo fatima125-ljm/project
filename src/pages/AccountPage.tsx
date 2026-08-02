@@ -11,13 +11,20 @@ export function AccountPage() {
   const { dict, locale } = useI18n();
   const { user, signOut } = useAuth();
   const [favKeys, setFavKeys] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
+    setLoading(true);
     supabase
       .from('favorites')
       .select('item_key')
-      .then(({ data }) => setFavKeys((data ?? []).map((r: { item_key: string }) => r.item_key)));
+      .then(({ data, error: err }) => {
+        if (err) setError(err.message);
+        else setFavKeys((data ?? []).map((r: { item_key: string }) => r.item_key));
+        setLoading(false);
+      });
   }, [user]);
 
   if (!user) {
@@ -51,7 +58,12 @@ export function AccountPage() {
           <Bookmark className="h-5 w-5 text-olive" />
           {dict.gallery.saved}
         </h2>
-        {favs.length === 0 ? (
+        {error && (
+          <p className="mt-4 text-sm text-error">{error}</p>
+        )}
+        {loading ? (
+          <div className="mt-6 h-8 w-8 animate-spin rounded-full border-2 border-border border-t-olive" />
+        ) : favs.length === 0 ? (
           <p className="mt-4 text-muted-foreground">
             <Link to="/gallery" className="text-olive">{dict.nav.gallery}</Link>
           </p>
@@ -59,7 +71,12 @@ export function AccountPage() {
           <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {favs.map((item) => (
               <article key={item.key} className="surface overflow-hidden">
-                <img src={item.image} alt={locale === 'ar' ? item.titleAr : item.title} className="aspect-square w-full object-cover" />
+                <img
+                  src={item.image}
+                  alt={locale === 'ar' ? item.titleAr : item.title}
+                  loading="lazy"
+                  className="aspect-square w-full object-cover"
+                />
                 <div className="p-4">
                   <h3 className="text-base font-semibold">{locale === 'ar' ? item.titleAr : item.title}</h3>
                 </div>

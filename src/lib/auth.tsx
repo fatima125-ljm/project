@@ -20,8 +20,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let mounted = true;
 
-    supabase.auth.getSession().then(({ data }) => {
+    supabase.auth.getSession().then(({ data, error }) => {
       if (!mounted) return;
+      if (error) {
+        setLoading(false);
+        return;
+      }
       setSession(data.session);
       setLoading(false);
     });

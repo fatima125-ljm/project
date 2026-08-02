@@ -20,26 +20,24 @@ export function BlogPage() {
         <div className="grid gap-8">
           {blogPosts.map((post) => (
             <article key={post.id} className="surface lift overflow-hidden md:grid md:grid-cols-[280px_1fr]">
-              <img
+                <img
                 src={post.image}
                 alt={locale === 'ar' ? post.titleAr : post.title}
                 loading="lazy"
+                width={280}
+                height={192}
                 className="h-48 w-full object-cover md:h-full"
               />
               <div className="p-6">
-                <time className="text-xs text-muted-foreground">{post.dateLabel}</time>
+                <time className="text-xs text-muted-foreground">{locale === 'ar' ? post.dateLabelAr : post.dateLabel}</time>
                 <h2 className="mt-2 text-xl font-semibold">{locale === 'ar' ? post.titleAr : post.title}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {locale === 'ar' ? post.excerptAr : post.excerpt}
                 </p>
-                <a
-                  href="#"
-                  onClick={(e) => e.preventDefault()}
-                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-olive"
-                >
+                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
                   {t.readArticle}
                   <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-                </a>
+                </span>
               </div>
             </article>
           ))}

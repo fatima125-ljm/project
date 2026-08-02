@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { type Dict, type Locale, getDict } from '@/lib/i18n';
 
 interface I18nContextValue {
@@ -15,7 +15,7 @@ const STORAGE_KEY = 'yarnmuse-locale';
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(() => {
-    const saved = typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
+    const saved = typeof window !== 'undefined' && window.localStorage ? window.localStorage.getItem(STORAGE_KEY) : null;
     return saved === 'ar' || saved === 'en' ? saved : 'en';
   });
 
@@ -25,16 +25,16 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dir = dir;
-    localStorage.setItem(STORAGE_KEY, locale);
+    if (typeof window !== 'undefined') window.localStorage.setItem(STORAGE_KEY, locale);
   }, [locale, dir]);
 
-  const value: I18nContextValue = {
+  const value = useMemo<I18nContextValue>(() => ({
     locale,
     dict,
     dir,
     setLocale: (l) => setLocaleState(l),
     toggle: () => setLocaleState((prev) => (prev === 'en' ? 'ar' : 'en')),
-  };
+  }), [locale, dict, dir]);
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }

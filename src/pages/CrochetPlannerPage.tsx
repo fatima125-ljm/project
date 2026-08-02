@@ -202,8 +202,14 @@ function Dashboard({
 
   const active = projects.filter((p) => p.status === 'active');
   const completed = projects.filter((p) => p.status === 'completed');
-  const totalHours = projects.reduce((sum, p) => sum + (p.yarn_amount ?? 0), 0);
   const totalYarn = projects.reduce((sum, p) => sum + (p.yarn_amount ?? 0), 0);
+  const totalHours = projects.reduce((sum, p) => {
+    if (!p.start_date) return sum;
+    const end = p.status === 'completed' ? new Date(p.updated_at) : new Date();
+    const start = new Date(p.start_date);
+    const days = Math.max(1, Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
+    return sum + Math.min(days * 2, 500);
+  }, 0);
   const weekData = getWeekProgress(projects);
 
   const upcomingDeadlines = projects
@@ -527,8 +533,8 @@ function ProjectForm({ onCancel, onCreated }: { onCancel: () => void; onCreated:
     onCreated();
   };
 
-  const cats = isAr ? dict.planner.categories : dict.planner.categories;
-  const skillCats = isAr ? dict.planner.skillLevels : dict.planner.skillLevels;
+  const cats = dict.planner.categories;
+  const skillCats = dict.planner.skillLevels;
 
   return (
     <>
@@ -691,7 +697,7 @@ function ProjectDetail({
   const isAr = locale === 'ar';
 
   const [progress, setProgress] = useState(project.progress);
-  const [progressDebounce, setProgressDebounce] = useState<NodeJS.Timeout | null>(null);
+  const [progressDebounce, setProgressDebounce] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [tasks, setTasks] = useState<PlannerTask[]>([]);
   const [newTask, setNewTask] = useState('');
   const [photos, setPhotos] = useState<PlannerPhoto[]>([]);
@@ -712,6 +718,12 @@ function ProjectDetail({
   useEffect(() => {
     loadDetail();
   }, [loadDetail]);
+
+  useEffect(() => {
+    return () => {
+      if (progressDebounce) clearTimeout(progressDebounce);
+    };
+  }, [progressDebounce]);
 
   const updateProgress = (val: number) => {
     setProgress(val);
@@ -799,8 +811,8 @@ function ProjectDetail({
 
   const isCompleted = progress >= 100;
   const remaining = 100 - progress;
-  const cat = isAr ? project.category : project.category;
-  const skill = isAr ? project.skill_level : project.skill_level;
+  const cat = project.category;
+  const skill = project.skill_level;
 
   return (
     <>
@@ -854,6 +866,7 @@ function ProjectDetail({
                 max={100}
                 value={progress}
                 onChange={(e) => updateProgress(Number(e.target.value))}
+                aria-label={t.progress}
                 className="h-2 flex-1 cursor-pointer appearance-none rounded-full bg-secondary accent-olive"
                 style={{ accentColor: 'hsl(var(--olive))' }}
               />
@@ -977,7 +990,7 @@ function ProjectDetail({
               <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
                 {photos.map((photo) => (
                   <div key={photo.id} className="group relative overflow-hidden rounded-2xl border border-border">
-                    <img src={photo.image_url} alt={photo.caption ?? ''} className="aspect-square w-full object-cover" />
+                    <img src={photo.image_url} alt={photo.caption ?? ''} loading="lazy" className="aspect-square w-full object-cover" />
                     {photo.caption && (
                       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
                         <p className="text-xs text-cream">{photo.caption}</p>
@@ -1154,7 +1167,14 @@ function StatsView({ projects }: { projects: PlannerProject[] }) {
   const total = projects.length;
   const finished = projects.filter((p) => p.status === 'completed').length;
   const current = projects.filter((p) => p.status === 'active').length;
-  const totalHours = projects.reduce((sum, p) => sum + (p.yarn_amount ?? 0), 0);
+  const totalYarn = projects.reduce((sum, p) => sum + (p.yarn_amount ?? 0), 0);
+  const totalHours = projects.reduce((sum, p) => {
+    if (!p.start_date) return sum;
+    const end = p.status === 'completed' ? new Date(p.updated_at) : new Date();
+    const start = new Date(p.start_date);
+    const days = Math.max(1, Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
+    return sum + Math.min(days * 2, 500);
+  }, 0);
   const completionRate = total > 0 ? Math.round((finished / total) * 100) : 0;
 
   const completedProjects = projects.filter((p) => p.status === 'completed' && p.target_date);

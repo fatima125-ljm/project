@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Languages, Menu, X, LogOut, User } from 'lucide-react';
 import { useI18n } from '@/lib/i18n-context';
@@ -11,6 +11,7 @@ export function Header() {
   const { user, signOut } = useAuth();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const links = [
     { to: '/', label: dict.nav.home },
@@ -25,16 +26,29 @@ export function Header() {
   ];
 
   const handleSignOut = async () => {
-    await signOut();
-    navigate('/');
+    try {
+      await signOut();
+      navigate('/');
+    } catch {
+      // ignore sign-out errors silently
+    }
   };
+
+  useEffect(() => {
+    if (!open) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, [open]);
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 sm:px-6 lg:py-4">
         <Logo />
 
-        <nav className="hidden items-center gap-1 xl:flex">
+        <nav className="hidden items-center gap-1 xl:flex" aria-label={dict.nav.menu}>
           {links.map((l) => (
             <NavLink
               key={l.to}
@@ -52,7 +66,12 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2 justify-self-end">
-          <Button variant="ghost" size="sm" onClick={toggle} aria-label="Toggle language">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggle}
+            aria-label={locale === 'en' ? 'تبديل اللغة' : 'Toggle language'}
+          >
             <Languages className="h-4 w-4" />
             <span className="text-xs font-semibold">{locale === 'en' ? 'العربية' : 'English'}</span>
           </Button>
@@ -81,7 +100,9 @@ export function Header() {
             variant="ghost"
             size="icon"
             className="xl:hidden"
-            aria-label="Menu"
+            aria-label={dict.nav.menu}
+            aria-expanded={open}
+            aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -90,8 +111,8 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="border-t border-border bg-background xl:hidden">
-          <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3 sm:px-6">
+        <div className="border-t border-border bg-background xl:hidden" ref={menuRef} id="mobile-nav">
+          <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3 sm:px-6" aria-label={dict.nav.menu}>
             {links.map((l) => (
               <NavLink
                 key={l.to}
